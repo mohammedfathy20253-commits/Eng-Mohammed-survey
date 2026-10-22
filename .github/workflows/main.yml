@@ -1,0 +1,29 @@
+name: Build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Unzip
+        shell: pwsh
+        run: Expand-Archive -Path EngMohammedFathySurvey.zip -DestinationPath src -Force
+      - name: Build
+        shell: pwsh
+        run: dotnet build src/EngMohammedFathySurvey/EngMohammedFathySurvey/EngMohammedFathySurvey.csproj -c Release -p:InstallBundle=false
+      - name: Package
+        shell: pwsh
+        run: |
+          $b = 'out/EngMohammedFathySurvey.bundle'
+          New-Item -ItemType Directory -Force "$b/Contents/net48","$b/Contents/net8" | Out-Null
+          $bin = 'src/EngMohammedFathySurvey/EngMohammedFathySurvey/bin/Release'
+          Copy-Item src/EngMohammedFathySurvey/Bundle/PackageContents.xml $b
+          Copy-Item "$bin/net48/EngMohammedFathySurvey.dll" "$b/Contents/net48"
+          Copy-Item "$bin/net8.0-windows/EngMohammedFathySurvey.dll" "$b/Contents/net8" -ErrorAction SilentlyContinue
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EngMohammedFathySurvey-bundle
+          path: out
