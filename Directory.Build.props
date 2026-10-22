@@ -1,0 +1,30 @@
+<Project>
+  <!--
+    AutoCAD folders used ONLY for the reference DLLs (acdbmgd / acmgd / accoremgd / AdWindows).
+
+    * net48 build  -> runs on AutoCAD 2015 ... 2024.
+        It is compiled against the OLDEST AutoCAD you have installed (2015 is best), so the same DLL runs on every newer version.
+        AcadLegacy is detected automatically (first folder found from 2015 up to 2024).
+    * net8 build   -> runs on AutoCAD 2025 (compiled against the 2025 folder).
+        If AutoCAD 2025 is not installed on this PC the net8 build is skipped automatically.
+
+    You can also set them by hand, e.g.  dotnet build -p:AcadLegacy="D:\Autodesk\AutoCAD 2018"
+  -->
+  <PropertyGroup>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2015\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2015</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2016\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2016</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2017\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2017</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2018\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2018</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2019\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2019</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2020\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2020</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2021\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2021</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2022\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2022</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2023\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2023</AcadLegacy>
+    <AcadLegacy Condition="'$(AcadLegacy)'=='' And Exists('C:\Program Files\Autodesk\AutoCAD 2024\acdbmgd.dll')">C:\Program Files\Autodesk\AutoCAD 2024</AcadLegacy>
+
+    <!-- no AutoCAD on this PC (e.g. GitHub build server) -> use the AutoCAD.NET NuGet packages -->
+    <UseNuGetAutoCAD Condition="'$(AcadLegacy)'==''">true</UseNuGetAutoCAD>
+
+    <Acad2025 Condition="'$(Acad2025)'==''">C:\Program Files\Autodesk\AutoCAD 2025</Acad2025>
+  </PropertyGroup>
+</Project>
